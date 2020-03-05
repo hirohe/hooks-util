@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "target": "ES6",
+    "outDir": "lib",
+    "lib": [
+      "DOM",
+      "ESNext"
+    ],
+    "declaration": true,
+    "skipLibCheck": true,
+    "strict": true
+  },
+  "include": [
+    "es"
+  ]
+}
