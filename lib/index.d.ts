@@ -1,3 +1,9 @@
-export declare type FetchAction<Data> = () => Promise<Data>;
-export declare function useFetch<T = undefined>(action: FetchAction<T>): [FetchAction<T>, T | undefined, boolean];
-export declare function useFetch<T>(action: FetchAction<T>, initialState: T): [FetchAction<T>, T, boolean];
+import useFetch from './useFetch';
+import useKeyPress from './useKeyPress';
+import useBreakPoints from './useBreakPoints';
+declare const _default: {
+    useFetch: typeof useFetch;
+    useKeyPress: typeof useKeyPress;
+    useBreakPoints: typeof useBreakPoints;
+};
+export default _default;
