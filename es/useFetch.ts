@@ -1,18 +1,18 @@
 import { useCallback, useState } from 'react';
 
-export type FetchAction<Data> = () => Promise<Data>;
+export type FetchAction<Data> = (...args: any[]) => Promise<Data>;
 
-export default function useFetch<T = undefined>(action: FetchAction<T>): [FetchAction<T>, T | undefined, boolean];
-export default function useFetch<T>(action: FetchAction<T>, initialState: T): [FetchAction<T>, T, boolean];
+export default function useFetch<Action extends FetchAction<T>, T = undefined>(action: Action): [Action, T | undefined, boolean];
+export default function useFetch<T, Action extends FetchAction<T>>(action: Action, initialState: T): [Action, T, boolean];
 
-export default function useFetch<T>(action: FetchAction<T>, initialState?: T): [FetchAction<T>, T | undefined, boolean] {
+export default function useFetch<T, Action extends FetchAction<T>>(action: Action, initialState?: T): [Action, T | undefined, boolean] {
   const [data, setData] = useState<T | undefined>(initialState);
   const [loading, setLoading] = useState<boolean>(false);
 
-  const fetchData = useCallback(function() {
+  const fetchData = useCallback((...args) => {
     if (action && typeof action === 'function') {
       setLoading(true);
-      const result = action();
+      const result = action.call(args);
       if (result !== undefined && result instanceof Promise) {
         return result.then((responseData: T) => {
           setData(responseData);
@@ -28,5 +28,5 @@ export default function useFetch<T>(action: FetchAction<T>, initialState?: T): [
     }
   }, [action]);
 
-  return [fetchData, data, loading];
+  return [fetchData as Action, data, loading];
 }

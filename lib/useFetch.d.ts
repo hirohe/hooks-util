@@ -1,4 +1,3 @@
-export declare type FetchAction<Data> = () => Promise<Data>;
-export declare function useFetch<T = undefined>(action: FetchAction<T>): [FetchAction<T>, T | undefined, boolean];
-export declare function useFetch<T>(action: FetchAction<T>, initialState: T): [FetchAction<T>, T, boolean];
-export default function useFetch<T>(action: FetchAction<T>, initialState?: T): [FetchAction<T>, T | undefined, boolean];
+export declare type FetchAction<Data> = (...args: any[]) => Promise<Data>;
+export default function useFetch<Action extends FetchAction<T>, T = undefined>(action: Action): [Action, T | undefined, boolean];
+export default function useFetch<T, Action extends FetchAction<T>>(action: Action, initialState: T): [Action, T, boolean];
