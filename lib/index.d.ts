@@ -1,9 +1,5 @@
-import useFetch from './useFetch';
-import useKeyPress from './useKeyPress';
-import useBreakPoints from './useBreakPoints';
-declare const _default: {
-    useFetch: typeof useFetch;
-    useKeyPress: typeof useKeyPress;
-    useBreakPoints: typeof useBreakPoints;
-};
-export default _default;
+export { default as useFetch } from './useFetch';
+export { default as useKeyPress } from './useKeyPress';
+export { default as useBreakPoints } from './useBreakPoints';
+export { default as useDebounce } from './useDebounce';
+export { default as usePrevious } from './usePrevious';
