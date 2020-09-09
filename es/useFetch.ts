@@ -12,7 +12,8 @@ export default function useFetch<T, Action extends FetchAction<T>>(action: Actio
   const fetchData = useCallback((...args) => {
     if (action && typeof action === 'function') {
       setLoading(true);
-      const result = action.call(args);
+      // @ts-ignore
+      const result = action.call(this, ...args);
       if (result !== undefined && result instanceof Promise) {
         return result.then((responseData: T) => {
           setData(responseData);
