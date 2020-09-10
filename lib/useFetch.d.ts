@@ -1,3 +1,4 @@
-export declare type FetchAction<Data> = (...args: any[]) => Promise<Data>;
-export default function useFetch<Action extends FetchAction<T>, T = undefined>(action: Action): [Action, T | undefined, boolean];
-export default function useFetch<T, Action extends FetchAction<T>>(action: Action, initialState: T): [Action, T, boolean];
+export declare type FetchAction<Data, Args extends any[] = any[]> = (...args: Args) => Promise<Data>;
+declare type ThenArg<T> = T extends PromiseLike<infer U> ? U : T;
+export default function useFetch<T extends FetchAction<any>, D = ThenArg<ReturnType<T>>>(action: T): [T, D | undefined, boolean];
+export default function useFetch<T extends FetchAction<any>, D = ThenArg<ReturnType<T>>>(action: T, initialState: D): [T, D, boolean];
