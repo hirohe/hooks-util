@@ -1,21 +1,22 @@
 import { useCallback, useState } from 'react';
 
-export type FetchAction<Data> = (...args: any[]) => Promise<Data>;
+export type FetchAction<Data, Args extends any[] = any[]> = (...args: Args) => Promise<Data>;
 
-export default function useFetch<Action extends FetchAction<T>, T = undefined>(action: Action): [Action, T | undefined, boolean];
-export default function useFetch<T, Action extends FetchAction<T>>(action: Action, initialState: T): [Action, T, boolean];
+type ThenArg<T> = T extends PromiseLike<infer U> ? U : T;
 
-export default function useFetch<T, Action extends FetchAction<T>>(action: Action, initialState?: T): [Action, T | undefined, boolean] {
-  const [data, setData] = useState<T | undefined>(initialState);
+export default function useFetch<T extends FetchAction<any>, D = ThenArg<ReturnType<T>>>(action: T): [T, D | undefined, boolean];
+export default function useFetch<T extends FetchAction<any>, D = ThenArg<ReturnType<T>>>(action: T, initialState: D): [T, D, boolean];
+
+export default function useFetch<T extends FetchAction<any>, D = ThenArg<ReturnType<T>>>(action: T, initialState?: D): [T, D | undefined, boolean] {
+  const [data, setData] = useState<D | undefined>(initialState);
   const [loading, setLoading] = useState<boolean>(false);
 
   const fetchData = useCallback((...args) => {
     if (action && typeof action === 'function') {
       setLoading(true);
-      // @ts-ignore
-      const result = action.call(this, ...args);
+      const result = action(...args);
       if (result !== undefined && result instanceof Promise) {
-        return result.then((responseData: T) => {
+        return result.then((responseData: D) => {
           setData(responseData);
           return responseData;
         }).finally(() => {
@@ -29,5 +30,5 @@ export default function useFetch<T, Action extends FetchAction<T>>(action: Actio
     }
   }, [action]);
 
-  return [fetchData as Action, data, loading];
+  return [fetchData as T, data, loading];
 }
